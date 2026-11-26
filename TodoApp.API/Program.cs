@@ -16,6 +16,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<GetTodoItemsHandler>();
 builder.Services.AddScoped<GetTodoItemByIdHandler>();
 builder.Services.AddScoped<CreateTodoItemCommandHandler>();
+builder.Services.AddScoped<UpdateTodoItemCommandHandler>();
+builder.Services.AddScoped<DeleteTodoItemCommandHandler>();
 
 var app = builder.Build();
 

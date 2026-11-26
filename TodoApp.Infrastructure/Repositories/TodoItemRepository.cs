@@ -23,6 +23,11 @@ namespace TodoApp.Infrastructure.Repositories
         {
             _dbContext.TodoItems.Add(todoItem);
         }
+        
+        public void Update(TodoItem todoItem)
+        {
+            _dbContext.TodoItems.Update(todoItem);
+        }
 
         public Task<List<TodoItem>> GetAllAsync(CancellationToken cancellationToken = default)
         {
@@ -31,12 +36,12 @@ namespace TodoApp.Infrastructure.Repositories
 
         public Task<TodoItem?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            return _dbContext.TodoItems.FirstOrDefaultAsync(item => item.Id == id);
+            return _dbContext.TodoItems.FirstOrDefaultAsync(item => item.Id == id, cancellationToken);
         }
 
-        public void Remove(TodoItem todoItem)
+        public void Delete(TodoItem todoItem)
         {
-            throw new NotImplementedException();
+            _dbContext.TodoItems.Remove(todoItem);
         }
     }
 }

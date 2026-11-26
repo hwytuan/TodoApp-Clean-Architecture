@@ -14,6 +14,6 @@ namespace TodoApp.Application.Interfaces
 
         void Add(TodoItem todoItem);
 
-        void Remove(TodoItem todoItem);
+        void Delete(TodoItem todoItem);
     }
 }

@@ -8,7 +8,7 @@ using TodoApp.Application.Interfaces;
 
 namespace TodoApp.Application.Features.TodoItems.Queries
 {
-    public class GetTodoItemByIdHandler
+    public sealed class GetTodoItemByIdHandler
     {
         private readonly ITodoItemRepository _repository;
 
@@ -17,9 +17,12 @@ namespace TodoApp.Application.Features.TodoItems.Queries
             _repository = repository;
         }
 
-        public async Task<TodoItemDto> HandleAsync(int id, CancellationToken cancellationToken)
+        public async Task<TodoItemDto?> HandleAsync(int id, CancellationToken cancellationToken)
         {
-            var todoItem = await _repository.GetByIdAsync(id, cancellationToken) ?? throw new NullReferenceException("Todo is not found");
+            var todoItem = await _repository.GetByIdAsync(id, cancellationToken);
+
+            if (todoItem is null) return null;
+
             return new TodoItemDto(todoItem.Id, todoItem.Title, todoItem.Description, todoItem.IsCompleted, todoItem.CreatedAt, todoItem.DueDate);
         }
     }

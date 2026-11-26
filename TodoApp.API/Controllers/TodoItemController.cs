@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using TodoApp.Application.Features.TodoItems.Commands;
 using TodoApp.Application.Features.TodoItems.DTOs;
 using TodoApp.Application.Features.TodoItems.Queries;
@@ -7,48 +9,63 @@ using TodoApp.Application.Features.TodoItems.Queries;
 
 namespace TodoApp.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/todo-item")]
     [ApiController]
-    public class TodoItemController(
+    public sealed class TodoItemController(
         GetTodoItemsHandler getTodoItemsHandler, 
-        GetTodoItemByIdHandler getTodoByIdHandler,
-        CreateTodoItemCommandHandler createTodoItemCommandHandler) : ControllerBase
+        GetTodoItemByIdHandler getTodoItemByIdHandler,
+        CreateTodoItemCommandHandler createTodoItemCommandHandler,
+        UpdateTodoItemCommandHandler updateTodoItemCommandHandler,
+        DeleteTodoItemCommandHandler deleteTodoItemCommandHandler) : ControllerBase
     {
 
         // GET: api/<TodoItemController>
         [HttpGet]
-        public async Task<ActionResult<List<TodoItemDto>>> Get(CancellationToken cancellationToken)
+        public async Task<ActionResult<IReadOnlyList<TodoItemDto>>> GetAllAsync(CancellationToken cancellationToken)
         {
             var todoItems = await getTodoItemsHandler.HandleAsync(cancellationToken);
             return Ok(todoItems);
         }
 
         // GET api/<TodoItemController>/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TodoItemDto>> Get(int id, CancellationToken cancellationToken)
+        [HttpGet("{id}", Name = "GetTodoItemById")]
+        public async Task<ActionResult<TodoItemDto>> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
-            var todoItem = await getTodoByIdHandler.HandleAsync(id, cancellationToken);
+            var todoItem = await getTodoItemByIdHandler.HandleAsync(id, cancellationToken);
+
+            if (todoItem is null) return NotFound($"Todo item with id '{id}' was not found.");
+
             return Ok(todoItem);
         }
 
         // POST api/<TodoItemController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] CreateTodoItemCommand value, CancellationToken cancellationToken)
+        public async Task<ActionResult<TodoItemDto>> CreateAsync([FromBody] CreateTodoItemCommand request, CancellationToken cancellationToken)
         {
-            await createTodoItemCommandHandler.HandleAsync(value, cancellationToken);
-            return Ok();
+            var todoItem = await createTodoItemCommandHandler.HandleAsync(request, cancellationToken);
+            return CreatedAtRoute("GetTodoItemById", new { id = todoItem.Id}, todoItem);
         }
 
-        //// PUT api/<TodoItemController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
+        // PUT api/<TodoItemController>/5
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateAsync(int id, [FromBody] UpdateTodoItemCommand request, CancellationToken cancellationToken)
+        {
+            var todoItem = await updateTodoItemCommandHandler.HandleAsync(id, request, cancellationToken);
 
-        //// DELETE api/<TodoItemController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+            if (todoItem is null) return NotFound($"Todo item with id '{id}' was not found.");
+
+            return Ok(todoItem);
+        }
+
+        // DELETE api/<TodoItemController>/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteAysnc(int id, CancellationToken cancellationToken)
+        {
+            bool isDelete = await deleteTodoItemCommandHandler.HandleAsync(id, cancellationToken);
+
+            if (!isDelete) return NotFound($"Todo item with id '{id}' was not found.");
+
+            return NoContent();
+        }
     }
 }

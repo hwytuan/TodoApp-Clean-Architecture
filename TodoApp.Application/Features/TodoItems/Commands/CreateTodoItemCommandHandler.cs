@@ -9,20 +9,19 @@ using TodoApp.Domain.Entities;
 
 namespace TodoApp.Application.Features.TodoItems.Commands
 {
-    public class CreateTodoItemCommandHandler(IUnitOfWork unitOfWork)
+    public sealed class CreateTodoItemCommandHandler(IUnitOfWork unitOfWork, ITodoItemRepository todoItemRepository)
     {
-        public async Task<TodoItemDto> HandleAsync(CreateTodoItemCommand command, CancellationToken cancellationToken)
+        public async Task<TodoItemDto> HandleAsync(CreateTodoItemCommand request, CancellationToken cancellationToken)
         {
             var todoItem = new TodoItem
             {
-                Title = command.Title,
-                Description = command.Description,
-                DueDate = command.DueDate,
+                Title = request.Title.Trim(),
+                Description = request.Description?.Trim(),
+                DueDate = request.DueDate,
                 IsCompleted = false,
-                CreatedAt = DateTime.Now
             };
 
-            unitOfWork.TodoItem.Add(todoItem);
+            todoItemRepository.Add(todoItem);
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return new TodoItemDto(todoItem.Id, todoItem.Title, todoItem.Description, todoItem.IsCompleted, todoItem.CreatedAt, todoItem.DueDate);

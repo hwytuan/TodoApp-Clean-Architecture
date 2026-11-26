@@ -8,8 +8,6 @@ namespace TodoApp.Application.Interfaces
 {
     public interface IUnitOfWork
     {
-        ITodoItemRepository TodoItem { get; }
-
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

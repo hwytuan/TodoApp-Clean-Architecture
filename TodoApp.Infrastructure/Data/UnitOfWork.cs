@@ -8,10 +8,8 @@ using TodoApp.Infrastructure.Repositories;
 
 namespace TodoApp.Infrastructure.Data
 {
-    internal sealed class UnitOfWork(TodoAppDbContext dbContext, ITodoItemRepository todoItemRepository) : IUnitOfWork
+    internal sealed class UnitOfWork(TodoAppDbContext dbContext) : IUnitOfWork
     {
-        public ITodoItemRepository TodoItem => todoItemRepository;
-
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return dbContext.SaveChangesAsync(cancellationToken);
