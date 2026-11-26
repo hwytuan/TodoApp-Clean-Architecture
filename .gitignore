@@ -1,0 +1,97 @@
+# =========================
+# Environment & Secrets
+# =========================
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+appsettings.*.Local.json
+secrets.json
+
+# =========================
+# Project-specific (giữ lại từ cấu hình trước đó)
+# =========================
+docs/
+
+# =========================
+# .NET / C# Build outputs
+# =========================
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+publish/
+artifacts/
+[Ll]og/
+[Ll]ogs/
+*.log
+
+# =========================
+# Visual Studio & IDEs
+# =========================
+.vs/
+*.user
+*.suo
+*.rsuser
+*.userosscache
+*.sln.docstates
+
+# JetBrains Rider
+.idea/
+*.DotSettings.user
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# =========================
+# NuGet Packages
+# =========================
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+
+# =========================
+# Test Results & Code Coverage
+# =========================
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+coverage*.xml
+
+# =========================
+# Local Database Files
+# =========================
+*.mdf
+*.ldf
+*.ndf
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# =========================
+# OS-generated Files
+# =========================
+.DS_Store
+Thumbs.db
+Desktop.ini
