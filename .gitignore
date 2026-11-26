@@ -9,11 +9,6 @@ appsettings.*.Local.json
 secrets.json
 
 # =========================
-# Project-specific (giữ lại từ cấu hình trước đó)
-# =========================
-docs/
-
-# =========================
 # .NET / C# Build outputs
 # =========================
 [Bb]in/
