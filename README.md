@@ -2,8 +2,6 @@
 
 Dịch vụ Backend RESTful API quản lý danh sách công việc được xây dựng trên **.NET 8**, áp dụng **Clean Architecture 4 tầng**, **Lightweight CQRS**, **Repository & Unit of Work** và **EF Core Database First** với **SQL Server 2022 (Docker)**.
 
-![Tổng quan Swagger UI TodoApp API](./docs/imgs/01-swagger-overview.png)
-
 ---
 
 ## Công nghệ sử dụng
@@ -26,26 +24,6 @@ Solution `TodoApp.slnx` chia thành 4 project theo đúng quy tắc phụ thuộ
 | **`TodoApp.Application`** | CQRS `Commands` / `Queries`, `TodoItemDto`, và hợp đồng `ITodoItemRepository`, `IUnitOfWork` |
 | **`TodoApp.Infrastructure`** | Triển khai EF Core (`TodoAppDbContext`, `TodoItemRepository`, `UnitOfWork`) đóng gói bằng `internal sealed` |
 | **`TodoApp.API`** | RESTful Controller (`TodoItemController`), Swagger và Composition Root (`Program.cs`) |
-
-![Sơ đồ ánh xạ kiến trúc Backend](./docs/architecture-mapping.png)
-
----
-
-## Cơ sở dữ liệu & Bộ API
-
-### Bảng `dbo.TodoItems`
-
-![Sơ đồ bảng TodoAppDB](./docs/todoapp-db-diagram.png)
-
-### Danh sách Endpoints (`/api/todo-item`)
-
-| Method | Endpoint | Mô tả | Mã phản hồi |
-| :---: | :--- | :--- | :--- |
-| `GET` | `/api/todo-item` | Lấy danh sách toàn bộ công việc (`AsNoTracking`) | `200 OK` |
-| `POST` | `/api/todo-item` | Tạo mới một công việc | `201 Created`, `400 Bad Request` |
-| `GET` | `/api/todo-item/{id}` | Xem chi tiết công việc theo ID | `200 OK`, `404 Not Found` |
-| `PUT` | `/api/todo-item/{id}` | Cập nhật nội dung và trạng thái `IsCompleted` | `200 OK`, `400`, `404 Not Found` |
-| `DELETE` | `/api/todo-item/{id}` | Xóa công việc theo ID | `204 No Content`, `404 Not Found` |
 
 ---
 
